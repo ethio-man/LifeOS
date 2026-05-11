@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Activity {
+  id         String   @id @default(cuid())
+  title      String
+  date       String
+  startTime  String
+  endTime    String?
+  types      String[]
+  importance String
+  notes      String   @default("")
+  createdAt  DateTime @default(now())
+
+  @@index([date])
+  @@index([importance])
+}
+
+model Skill {
+  id        String   @id @default(cuid())
+  name      String
+  status    String
+  category  String   @default("")
+  level     String   @default("")
+  tags      String[]
+  source    String   @default("")
+  notes     String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([status])
+}
+
+model Project {
+  id        String   @id @default(cuid())
+  name      String
+  status    String
+  desc      String   @default("")
+  startDate String?
+  endDate   String?
+  skills    String[]
+  url       String   @default("")
+  progress  Int      @default(0)
+  notes     String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([status])
+}
+
+model Job {
+  id        String   @id @default(cuid())
+  company   String
+  role      String
+  status    String
+  appliedDate String
+  location  String   @default("")
+  url       String   @default("")
+  rejection String   @default("")
+  notes     String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([status])
+}
+
+model Config {
+  id                 String   @id @default(cuid())
+  activityTypes      String[]
+  importanceLevels   String[]
+}
