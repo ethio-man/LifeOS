@@ -1,19 +1,19 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from "react-router-dom";
 
 const navItems = [
-  { path: '/', icon: '⚡', label: 'Activity Log', section: 'Core' },
-  { path: '/history', icon: '📋', label: 'History', section: 'Core' },
-  { path: '/analytics', icon: '📊', label: 'Analytics', section: 'Core' },
-  { path: '/skills', icon: '🧠', label: 'Skill Store', section: 'Growth' },
-  { path: '/projects', icon: '🚀', label: 'Projects', section: 'Growth' },
-  { path: '/jobs', icon: '💼', label: 'Job Tracker', section: 'Growth' },
+  { path: "/", icon: "", label: "Activity Log", section: "Core" },
+  { path: "/history", icon: "", label: "History", section: "Core" },
+  { path: "/analytics", icon: "", label: "Analytics", section: "Core" },
+  { path: "/skills", icon: "", label: "Skill Store", section: "Growth" },
+  { path: "/projects", icon: "", label: "Projects", section: "Growth" },
+  { path: "/jobs", icon: "", label: "Job Tracker", section: "Growth" },
 ];
 
-const settingsItem = { path: '/settings', icon: '⚙️', label: 'Settings' };
+const settingsItem = { path: "/settings", icon: "⚙️", label: "Settings" };
 
 export default function Sidebar() {
   const location = useLocation();
-  let currentSection = '';
+  let currentSection = "";
 
   return (
     <nav className="hidden md:flex w-[220px] min-w-[220px] bg-bg-2 border-r border-white/5 flex-col py-5">
@@ -37,8 +37,8 @@ export default function Sidebar() {
               className={({ isActive }) =>
                 `flex items-center gap-2.5 px-5 py-2.5 text-[13.5px] border-l-2 transition-all duration-150 my-0.5 ${
                   isActive
-                    ? 'bg-accent/10 text-accent-2 border-l-accent'
-                    : 'text-text-2 border-l-transparent hover:bg-bg-3 hover:text-text'
+                    ? "bg-accent/10 text-accent-2 border-l-accent"
+                    : "text-text-2 border-l-transparent hover:bg-bg-3 hover:text-text"
                 }`
               }
             >
@@ -56,8 +56,8 @@ export default function Sidebar() {
         className={({ isActive }) =>
           `flex items-center gap-2.5 px-5 py-2.5 text-[13.5px] border-l-2 transition-all duration-150 ${
             isActive
-              ? 'bg-accent/10 text-accent-2 border-l-accent'
-              : 'text-text-2 border-l-transparent hover:bg-bg-3 hover:text-text'
+              ? "bg-accent/10 text-accent-2 border-l-accent"
+              : "text-text-2 border-l-transparent hover:bg-bg-3 hover:text-text"
           }`
         }
       >
