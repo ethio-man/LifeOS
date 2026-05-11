@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 interface TopbarProps {
   title: string;
@@ -12,7 +12,9 @@ export default function Topbar({ title, children }: TopbarProps) {
         <span className="md:hidden text-lg font-bold tracking-tight">
           Life<span className="text-accent-2">OS</span>
         </span>
-        <h1 className="text-base md:text-xl font-semibold tracking-tight">{title}</h1>
+        <h1 className="text-base md:text-xl font-semibold tracking-tight">
+          {title}
+        </h1>
       </div>
       <div className="flex items-center gap-2">{children}</div>
     </div>

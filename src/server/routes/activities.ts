@@ -1,9 +1,10 @@
-import { Router, Request, Response } from 'express';
-import prisma from '../prisma.js';
+import { Router } from "express";
+import type { Request, Response } from "express";
+import prisma from "../prisma.js";
 
 const router = Router();
 
-router.get('/', async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
   const { date, type, importance, search } = req.query;
 
   const where: Record<string, unknown> = {};
@@ -13,48 +14,66 @@ router.get('/', async (req: Request, res: Response) => {
   if (type) where.types = { has: type as string };
   if (search) {
     where.OR = [
-      { title: { contains: search as string, mode: 'insensitive' } },
-      { notes: { contains: search as string, mode: 'insensitive' } },
+      { title: { contains: search as string, mode: "insensitive" } },
+      { notes: { contains: search as string, mode: "insensitive" } },
     ];
   }
 
   const activities = await prisma.activity.findMany({
     where,
-    orderBy: [{ date: 'desc' }, { startTime: 'asc' }],
+    orderBy: [{ date: "desc" }, { startTime: "asc" }],
   });
 
   res.json(activities);
 });
 
-router.post('/', async (req: Request, res: Response) => {
-  const { title, date, startTime, endTime, types, importance, notes } = req.body;
+router.post("/", async (req: Request, res: Response) => {
+  const { title, date, startTime, endTime, types, importance, notes } =
+    req.body;
 
   if (!title || !date || !startTime || !importance) {
-    res.status(400).json({ error: 'Missing required fields' });
+    res.status(400).json({ error: "Missing required fields" });
     return;
   }
 
   const activity = await prisma.activity.create({
-    data: { title, date, startTime, endTime: endTime || null, types: types || [], importance, notes: notes || '' },
+    data: {
+      title,
+      date,
+      startTime,
+      endTime: endTime || null,
+      types: types || [],
+      importance,
+      notes: notes || "",
+    },
   });
 
   res.status(201).json(activity);
 });
 
-router.put('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { title, date, startTime, endTime, types, importance, notes } = req.body;
+router.put("/:id", async (req: Request, res: Response) => {
+  const { id } = req.params as { id: string };
+  const { title, date, startTime, endTime, types, importance, notes } =
+    req.body;
 
   const activity = await prisma.activity.update({
     where: { id },
-    data: { title, date, startTime, endTime: endTime || null, types: types || [], importance, notes: notes || '' },
+    data: {
+      title,
+      date,
+      startTime,
+      endTime: endTime || null,
+      types: types || [],
+      importance,
+      notes: notes || "",
+    },
   });
 
   res.json(activity);
 });
 
-router.delete('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
+router.delete("/:id", async (req: Request, res: Response) => {
+  const { id } = req.params as { id: string };
   await prisma.activity.delete({ where: { id } });
   res.json({ success: true });
 });

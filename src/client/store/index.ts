@@ -1,6 +1,12 @@
-import { create } from 'zustand';
-import type { Activity, Skill, Project, Job, AppConfig } from '../../shared/types';
-import { activityApi, skillApi, projectApi, jobApi, configApi } from '../api';
+import { create } from "zustand";
+import type {
+  Activity,
+  Skill,
+  Project,
+  Job,
+  AppConfig,
+} from "../../shared/types";
+import { activityApi, skillApi, projectApi, jobApi, configApi } from "../api";
 
 interface Store {
   // Auth
@@ -16,41 +22,41 @@ interface Store {
   // Activities
   activities: Activity[];
   fetchActivities: (params?: Record<string, string>) => Promise<void>;
-  createActivity: (data: Omit<Activity, 'id' | 'createdAt'>) => Promise<void>;
+  createActivity: (data: Omit<Activity, "id" | "createdAt">) => Promise<void>;
   updateActivity: (id: string, data: Partial<Activity>) => Promise<void>;
   deleteActivity: (id: string) => Promise<void>;
 
   // Skills
   skills: Skill[];
   fetchSkills: (status?: string) => Promise<void>;
-  createSkill: (data: Omit<Skill, 'id' | 'createdAt'>) => Promise<void>;
+  createSkill: (data: Omit<Skill, "id" | "createdAt">) => Promise<void>;
   updateSkill: (id: string, data: Partial<Skill>) => Promise<void>;
   deleteSkill: (id: string) => Promise<void>;
 
   // Projects
   projects: Project[];
   fetchProjects: (status?: string) => Promise<void>;
-  createProject: (data: Omit<Project, 'id' | 'createdAt'>) => Promise<void>;
+  createProject: (data: Omit<Project, "id" | "createdAt">) => Promise<void>;
   updateProject: (id: string, data: Partial<Project>) => Promise<void>;
   deleteProject: (id: string) => Promise<void>;
 
   // Jobs
   jobs: Job[];
   fetchJobs: (status?: string) => Promise<void>;
-  createJob: (data: Omit<Job, 'id' | 'createdAt'>) => Promise<void>;
+  createJob: (data: Omit<Job, "id" | "createdAt">) => Promise<void>;
   updateJob: (id: string, data: Partial<Job>) => Promise<void>;
   deleteJob: (id: string) => Promise<void>;
 }
 
-export const useStore = create<Store>((set, get) => ({
+export const useStore = create<Store>((set) => ({
   // Auth
-  token: localStorage.getItem('lifeos_token'),
-  isAuthenticated: !!localStorage.getItem('lifeos_token'),
+  token: localStorage.getItem("lifeos_token"),
+  isAuthenticated: !!localStorage.getItem("lifeos_token"),
   setToken: (token) => {
     if (token) {
-      localStorage.setItem('lifeos_token', token);
+      localStorage.setItem("lifeos_token", token);
     } else {
-      localStorage.removeItem('lifeos_token');
+      localStorage.removeItem("lifeos_token");
     }
     set({ token, isAuthenticated: !!token });
   },
@@ -78,7 +84,9 @@ export const useStore = create<Store>((set, get) => ({
   },
   updateActivity: async (id, updates) => {
     const { data } = await activityApi.update(id, updates);
-    set((s) => ({ activities: s.activities.map((a) => (a.id === id ? data : a)) }));
+    set((s) => ({
+      activities: s.activities.map((a) => (a.id === id ? data : a)),
+    }));
   },
   deleteActivity: async (id) => {
     await activityApi.delete(id);

@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const navItems = [
   { path: "/", icon: "", label: "Activity Log", section: "Core" },
@@ -12,7 +12,6 @@ const navItems = [
 const settingsItem = { path: "/settings", icon: "⚙️", label: "Settings" };
 
 export default function Sidebar() {
-  const location = useLocation();
   let currentSection = "";
 
   return (
