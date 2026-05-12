@@ -26,7 +26,8 @@ app.use("/api/activities", authMiddleware, activityRoutes);
 app.use("/api/skills", authMiddleware, skillRoutes);
 app.use("/api/projects", authMiddleware, projectRoutes);
 app.use("/api/jobs", authMiddleware, jobRoutes);
-app.use("/api/config", authMiddleware, configRoutes);
+// Config: GET is public (labels for forms); PUT requires auth (see config routes)
+app.use("/api/config", configRoutes);
 
 // Health check
 app.get("/api/health", (_req, res) => {

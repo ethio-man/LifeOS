@@ -1,6 +1,7 @@
 import { Router } from "express";
 import type { Request, Response } from "express";
 import prisma from "../prisma.js";
+import { authMiddleware } from "../middleware/auth.js";
 
 const DEFAULT_TYPES = [
   "Coding",
@@ -29,36 +30,49 @@ const DEFAULT_LEVELS = [
 
 const router = Router();
 
-router.get("/", async (_req: Request, res: Response) => {
-  let config = await prisma.config.findUnique({ where: { id: "default" } });
+router.get("/", async (_req: Request, res: Response, next) => {
+  try {
+    let config = await prisma.config.findUnique({ where: { id: "default" } });
 
-  if (!config) {
-    config = await prisma.config.create({
-      data: {
-        id: "default",
-        activityTypes: DEFAULT_TYPES,
-        importanceLevels: DEFAULT_LEVELS,
-      },
-    });
+    if (!config) {
+      config = await prisma.config.create({
+        data: {
+          id: "default",
+          activityTypes: DEFAULT_TYPES,
+          importanceLevels: DEFAULT_LEVELS,
+        },
+      });
+    }
+
+    res.json(config);
+  } catch (err) {
+    console.error("[config GET]", err);
+    next(err);
   }
-
-  res.json(config);
 });
 
-router.put("/", async (req: Request, res: Response) => {
-  const { activityTypes, importanceLevels } = req.body;
+router.put("/", authMiddleware, async (req: Request, res: Response, next) => {
+  try {
+    const { activityTypes, importanceLevels } = req.body;
 
-  const config = await prisma.config.upsert({
-    where: { id: "default" },
-    update: { activityTypes, importanceLevels },
-    create: {
-      id: "default",
-      activityTypes: activityTypes || DEFAULT_TYPES,
-      importanceLevels: importanceLevels || DEFAULT_LEVELS,
-    },
-  });
+    const config = await prisma.config.upsert({
+      where: { id: "default" },
+      update: {
+        ...(activityTypes !== undefined && { activityTypes }),
+        ...(importanceLevels !== undefined && { importanceLevels }),
+      },
+      create: {
+        id: "default",
+        activityTypes: activityTypes ?? DEFAULT_TYPES,
+        importanceLevels: importanceLevels ?? DEFAULT_LEVELS,
+      },
+    });
 
-  res.json(config);
+    res.json(config);
+  } catch (err) {
+    console.error("[config PUT]", err);
+    next(err);
+  }
 });
 
 export default router;

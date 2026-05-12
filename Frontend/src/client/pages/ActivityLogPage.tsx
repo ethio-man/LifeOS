@@ -1,7 +1,9 @@
+import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import PageFrame from "../components/Layout/PageFrame";
 import Modal from "../components/ui/Modal";
 import type { Activity } from "../../shared/types";
+import { resolvedApiBaseUrl } from "../api/client";
 import { useStore } from "../store";
 
 function todayISO() {
@@ -40,10 +42,28 @@ export default function ActivityLogPage() {
     setLoading(true);
     try {
       await Promise.all([fetchConfig(), fetchActivities()]);
-    } catch {
-      setLoadError(
-        "Could not load data. Check VITE_API_URL, network, and login.",
-      );
+    } catch (e: unknown) {
+      let message =
+        "Could not load data. Check VITE_API_URL, network, and login.";
+      if (axios.isAxiosError(e)) {
+        const status = e.response?.status;
+        const url = e.config?.baseURL ?? resolvedApiBaseUrl;
+        if (status === 404) {
+          message =
+            "API returned 404. VITE_API_URL must be your Backend URL (e.g. https://your-backend.vercel.app/api), not the frontend site. Redeploy after changing env.";
+        } else if (status === 401) {
+          message = "Unauthorized — sign out and sign in again (token may be invalid).";
+        } else if (status === 500) {
+          message =
+            "Server error (500). Open your Backend project on Vercel → Logs. Often DATABASE_URL, Prisma migrate, or Postgres SSL.";
+        } else if (!e.response) {
+          message =
+            "Network error — wrong URL, CORS, or API offline. Confirm VITE_API_URL matches your deployed backend.";
+        } else {
+          message = `Request failed (${status ?? "?"}). API base: ${url}`;
+        }
+      }
+      setLoadError(message);
     } finally {
       setLoading(false);
     }

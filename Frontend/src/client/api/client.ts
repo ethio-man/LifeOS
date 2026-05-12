@@ -2,13 +2,26 @@ import axios from "axios";
 
 const rawApiUrl = import.meta.env.VITE_API_URL || "http://localhost:3001/api";
 const normalizedApiUrl = rawApiUrl.replace(/\/$/, "");
-const API_URL = normalizedApiUrl.endsWith("/api")
+/** Base URL for `/activities`, `/config`, etc. (must be the backend origin, not the static frontend host). */
+export const resolvedApiBaseUrl = normalizedApiUrl.endsWith("/api")
   ? normalizedApiUrl
   : `${normalizedApiUrl}/api`;
 
 export const apiClient = axios.create({
-  baseURL: API_URL,
+  baseURL: resolvedApiBaseUrl,
 });
+
+if (typeof window !== "undefined") {
+  try {
+    if (new URL(resolvedApiBaseUrl).origin === window.location.origin) {
+      console.warn(
+        "[LifeOS] VITE_API_URL points at this same site. Set it to your Backend deployment URL (https://<backend-project>.vercel.app/api), then redeploy the frontend.",
+      );
+    }
+  } catch {
+    /* ignore malformed URL */
+  }
+}
 
 // Interceptor to add token to requests
 apiClient.interceptors.request.use(
