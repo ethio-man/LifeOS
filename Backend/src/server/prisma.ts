@@ -10,6 +10,17 @@ if (!connectionString) {
   );
 }
 
+if (
+  process.env.VERCEL &&
+  connectionString.includes("db.") &&
+  connectionString.includes(".supabase.co") &&
+  !connectionString.includes("pooler.supabase.com")
+) {
+  console.warn(
+    "[LifeOS] DATABASE_URL uses Supabase direct host (db.*.supabase.co). From Vercel serverless this often fails with P1001. Use the Transaction pooler URI from Supabase Dashboard → Connect → Transaction pool (port 6543, host *.pooler.supabase.com) and append ?pgbouncer=true to the URL.",
+  );
+}
+
 /** Single small pool — recommended for Vercel serverless so each instance does not exhaust DB connections. */
 const pool = new Pool({
   connectionString,
