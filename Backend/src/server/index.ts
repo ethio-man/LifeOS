@@ -15,7 +15,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(helmet({ contentSecurityPolicy: false }));
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 // Public routes
@@ -36,5 +36,5 @@ app.get("/api/health", (_req, res) => {
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`🚀 LifeOS API running on http://localhost:${PORT}`);
+  console.log(` LifeOS API running on http://localhost:${PORT}`);
 });
