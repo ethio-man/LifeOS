@@ -33,7 +33,10 @@ export default function SettingsPage() {
     document.title = "LifeOS | Settings";
   }, []);
 
-  const persist = async (activityTypes: string[], importanceLevels: string[]) => {
+  const persist = async (
+    activityTypes: string[],
+    importanceLevels: string[],
+  ) => {
     setBusy(true);
     setError(null);
     try {
@@ -146,7 +149,6 @@ export default function SettingsPage() {
                 />
                 <button
                   type="button"
-                  disabled={busy || !newType.trim()}
                   onClick={addType}
                   className="rounded-2xl border border-white/15 px-4 py-2.5 text-sm font-medium text-slate-100 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
                 >
