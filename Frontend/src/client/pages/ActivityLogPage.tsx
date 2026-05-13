@@ -43,29 +43,26 @@ export default function ActivityLogPage() {
     try {
       await Promise.all([fetchConfig(), fetchActivities()]);
     } catch (e: unknown) {
-      let message =
-        "Could not load data. Check VITE_API_URL, network, and login.";
+      let message = "Could not load data. ";
       if (axios.isAxiosError(e)) {
         const status = e.response?.status;
         const url = e.config?.baseURL ?? resolvedApiBaseUrl;
         if (status === 404) {
-          message =
-            "API returned 404. VITE_API_URL must be your Backend URL (e.g. https://your-backend.vercel.app/api), not the frontend site. Redeploy after changing env.";
+          message = "API returned 404. ";
         } else if (status === 401) {
-          message = "Unauthorized — sign out and sign in again (token may be invalid).";
+          message =
+            "Unauthorized — sign out and sign in again (token may be invalid).";
         } else if (status === 500) {
-          message =
-            "Server error (500). Open your Backend project on Vercel → Logs. Often DATABASE_URL, Prisma migrate, or Postgres SSL.";
+          message = "Server error (500). ";
         } else if (!e.response) {
-          message =
-            "Network error — wrong URL, CORS, or API offline. Confirm VITE_API_URL matches your deployed backend.";
+          message = "Network error — wrong URL, CORS, or API offline.";
         } else {
           message = `Request failed (${status ?? "?"}). API base: ${url}`;
         }
       }
       setLoadError(message);
     } finally {
-      setLoading(false);
+      setLoading(true);
     }
   }, [fetchConfig, fetchActivities]);
 
@@ -124,7 +121,12 @@ export default function ActivityLogPage() {
     e.preventDefault();
     setSubmitError(null);
 
-    if (!form.title.trim() || !form.date || !form.startTime || !form.importance) {
+    if (
+      !form.title.trim() ||
+      !form.date ||
+      !form.startTime ||
+      !form.importance
+    ) {
       setSubmitError("Title, date, start time, and importance are required.");
       return;
     }
@@ -177,9 +179,7 @@ export default function ActivityLogPage() {
       description="Log what you did with types and importance from Settings. Add entries here or tune labels under Settings → Activity types."
     >
       <div className="flex flex-col gap-6">
-        {loadError ? (
-          <p className="text-sm text-red-300">{loadError}</p>
-        ) : null}
+        {loadError ? <p className="text-sm text-red-300">{loadError}</p> : null}
 
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="grid gap-3 sm:grid-cols-3">
