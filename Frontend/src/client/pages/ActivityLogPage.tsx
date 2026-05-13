@@ -212,7 +212,6 @@ export default function ActivityLogPage() {
           <button
             type="button"
             onClick={openCreate}
-            disabled={false}
             className="rounded-2xl bg-cyan-300 px-5 py-3 font-medium text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Add activity
