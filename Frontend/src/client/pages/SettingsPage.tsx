@@ -94,11 +94,7 @@ export default function SettingsPage() {
       <div className="flex flex-col gap-10">
         {error ? <p className="text-sm text-red-300">{error}</p> : null}
 
-        {loading ? (
-          <p className="text-sm text-slate-400">Loading settings…</p>
-        ) : !config ? (
-          <p className="text-sm text-slate-400">No configuration loaded.</p>
-        ) : (
+        {
           <>
             <section className="space-y-4">
               <div>
@@ -215,7 +211,7 @@ export default function SettingsPage() {
               </div>
             </section>
           </>
-        )}
+        }
       </div>
     </PageFrame>
   );
