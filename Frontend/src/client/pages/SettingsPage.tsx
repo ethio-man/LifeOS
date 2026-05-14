@@ -94,7 +94,11 @@ export default function SettingsPage() {
       <div className="flex flex-col gap-10">
         {error ? <p className="text-sm text-red-300">{error}</p> : null}
 
-        {
+        {loading ? (
+          <p className="text-sm text-slate-400">Loading settings…</p>
+        ) : !config ? (
+          <p className="text-sm text-slate-400">No configuration loaded.</p>
+        ) : (
           <>
             <section className="space-y-4">
               <div>
@@ -145,6 +149,7 @@ export default function SettingsPage() {
                 />
                 <button
                   type="button"
+                  disabled={busy || !newType.trim()}
                   onClick={addType}
                   className="rounded-2xl border border-white/15 px-4 py-2.5 text-sm font-medium text-slate-100 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
                 >
@@ -211,7 +216,7 @@ export default function SettingsPage() {
               </div>
             </section>
           </>
-        }
+        )}
       </div>
     </PageFrame>
   );
